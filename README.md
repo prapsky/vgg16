@@ -7,7 +7,7 @@ VGG16 Image Classification using TensorFlow Serving and Docker container.
 3. [Call Prediction](#call-prediction)
 
 ### Train and Export
-1. Train and export the model to be server by TensorFlow using following command:
+1. Train and export the model to be served by TensorFlow using following command:
 ```
 $ python vgg16_train.py
 ```

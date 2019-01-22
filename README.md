@@ -28,3 +28,11 @@ $ docker run -p 8500:8500 \
 ```
 $ python vgg16_predict.py --image=./cat.jpg
 ```
+2. We should see something like this:
+```
+Using TensorFlow backend.
+The server hostport is:  localhost:8500
+The image is:  ./cat.jpg
+The result is:  [[('n03207941', 'dishwasher', 0.10127503424882889), ('n02123394', 'Persian_cat', 0.07714854925870895), ('n04553703', 'washbasin', 0.05456560105085373), ('n04554684', 'washer', 0.05264336243271828), ('n02105056', 'groenendael', 0.04825349897146225)]]
+Time elapsed: 2.8194730281829834
+```

@@ -57,7 +57,10 @@ def main(_):
 			signature_def_map={'predict_images': prediction_signature})
 		builder.save()
 
+	#Clear session	
+	K.clear_session()
 	print("Done exporting!")
+	
 
 if __name__ == '__main__':
 	tf.app.run()

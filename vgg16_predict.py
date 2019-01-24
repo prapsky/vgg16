@@ -54,12 +54,12 @@ def main(_):
 	request = predict_pb2.PredictRequest()
 	request.model_spec.name = 'vgg16'
 	request.model_spec.signature_name = 'predict_images'
-	request.inputs['inputs'].CopyFrom(tf.contrib.util.make_tensor_proto(images_np, shape=list(images_np.shape)))
+	request.inputs['images'].CopyFrom(tf.contrib.util.make_tensor_proto(images_np, shape=list(images_np.shape)))
 	result = stub.Predict(request, 60.0)
 	
 	#get result and postprocess
 	images_predictions_np = np.zeros((1, 1000), dtype=np.float32)
-	images_predictions_np[0] = result.outputs['outputs'].float_val
+	images_predictions_np[0] = result.outputs['scores'].float_val
 	images_predictions_np = images_predictions_np.astype(float)
 	images_predictions_list = decode_predictions(images_predictions_np, top=5)
 	print("The result is: ", images_predictions_list)

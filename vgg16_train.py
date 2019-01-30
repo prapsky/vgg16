@@ -19,7 +19,7 @@ from tensorflow.python.saved_model.signature_def_utils_impl import build_signatu
 def main(_):
 	print("Start the training...")
 	
-	#import dataset
+	#import model
 	model = VGG16(weights = 'imagenet', include_top = True)
 	sgd = SGD(lr = 0.1, decay = 1e-6, momentum = 0.9, nesterov = True)
 

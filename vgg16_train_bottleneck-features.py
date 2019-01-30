@@ -6,7 +6,7 @@ import sys
 import tensorflow as tf
 from keras import backend as K
 from keras.applications.vgg16 import VGG16
-from keras.optimizers import SGD
+from keras.models import Model
 import numpy as np
 import cv2
 
@@ -18,38 +18,49 @@ from tensorflow.python.saved_model.signature_def_utils_impl import build_signatu
 
 def main(_):
 	print("Start the training...")
-	
-	#import dataset
-	model = VGG16(weights = 'imagenet', include_top = True)
 
-	#test the model
-	im = cv2.resize(cv2.imread('bird.jpg'), (224,224))
-	im = np.expand_dims(im, axis=0)
-	out = model.predict(im)
-	print("The label is: ", np.argmax(out))
-
-	#view the properties of the model
-	model.summary()
-	print("The input: ", model.inputs)
-	print("The output: ", model.outputs)
+	#import model
+	model = VGG16(weights = 'imagenet', include_top = True, input_shape = (224, 224, 3))
 
 	#get input layer
 	input_layer = model.get_layer('input_1')
 	input_layer_in = input_layer.input
 	print("The input layer: ", input_layer_in)
 
-	#using bottleneck features
-	bottleneck_layer = model.get_layer('block5_pool')
-	bottleneck_layer_out = bottleneck_layer.output
-	print("The bottleneck layer: ", bottleneck_layer_out)
+	#get block 5 pool layer for bottleneck features
+	block5_pool = model.get_layer('block5_pool')
+	block5_pool_out = block5_pool.output
+	print("The block 5 pool layer: ", block5_pool_out)
 
-	#convert input layer and bottleneck layer from tensor to tensor info
-	input_layer_in_info = build_tensor_info(input_layer_in)
-	bottleneck_layer_out_info = build_tensor_info(bottleneck_layer_out)
+	#get prediction layer
+	predictions_layer = model.get_layer('predictions')
+	predictions_layer_out = predictions_layer.output
+	print("The predictions layer: ", predictions_layer_out)
+
+	#create new model using additional output of bottleneck features
+	vgg16_b_f_model = Model(inputs = input_layer_in,
+		outputs = [block5_pool_out, predictions_layer_out])
+
+	#view the summary of the new model
+	vgg16_b_f_model.summary()
+
+	#get input layer
+	b_f_input_layer = vgg16_b_f_model.get_layer('input_1')
+	b_f_input_layer_in = b_f_input_layer.input
+	print("The input layer: ", b_f_input_layer_in)
+
+	#get output layer
+	vgg16_b_f_outputs = vgg16_b_f_model.outputs
+	print("The block5_pool layer: ", vgg16_b_f_outputs[0])
+	print("The predictions layer: ", vgg16_b_f_outputs[1])
+
+	#convert input layer and predictions layer from tensor to tensor info
+	input_layer_in_info = build_tensor_info(b_f_input_layer_in)
+	predictions_layer_out_info = build_tensor_info(vgg16_b_f_outputs[1])
 
 	#export model
 	K.set_learning_phase(0)
-	export_path_base = "./vgg16"
+	export_path_base = "./vgg16_bottleneck-features"
 	model_version = "1"
 	export_path = os.path.join(
 		tf.compat.as_bytes(export_path_base),
@@ -58,7 +69,7 @@ def main(_):
 
 	prediction_signature = build_signature_def(
 		inputs = {'images': input_layer_in_info},
-		outputs = {'scores': bottleneck_layer_out_info},
+		outputs = {'scores': predictions_layer_out_info},
 		method_name = signature_constants.PREDICT_METHOD_NAME)
 
 	builder = saved_model_builder.SavedModelBuilder(export_path)
@@ -68,7 +79,7 @@ def main(_):
 			tags = [tag_constants.SERVING],
 			signature_def_map = {'predict_images': prediction_signature})
 		builder.save()
-	
+
 	#clear session	
 	K.clear_session()
 	print("Done exporting!")

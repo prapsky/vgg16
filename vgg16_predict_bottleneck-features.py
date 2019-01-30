@@ -29,7 +29,7 @@ def parse_args():
     parser.add_argument('-p', '--image_path',
                         dest='image_path',
                         default='',
-						help='path to images folder',)
+                        help='path to images folder',)
     args = parser.parse_args()
     hostport = args.server
     return hostport, args.image, args.image_path == 'true'

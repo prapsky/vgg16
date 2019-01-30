@@ -130,15 +130,15 @@ cd11e60f76fb        tensorflow/serving   "/usr/bin/tf_serving…"   2 minutes ag
 ### Call Prediction
 1. Now we can call our model that is running in the Docker container using following command:
 ```
-$ python vgg16_predict.py --image=./cat.jpg
+$ python vgg16_predict.py --image=./bird.jpg
 ```
 2. We should see something like this:
 ```
 Using TensorFlow backend.
 The server hostport is:  localhost:8500
-The image is:  ./cat.jpg
-The result is:  [[('n03207941', 'dishwasher', 0.10127503424882889), ('n02123394', 'Persian_cat', 0.07714854925870895), ('n04553703', 'washbasin', 0.05456560105085373), ('n04554684', 'washer', 0.05264336243271828), ('n02105056', 'groenendael', 0.04825349897146225)]]
-Time elapsed: 2.8194730281829834
+The image is:  ./bird.jpg
+The result is:  [[('n01592084', 'chickadee', 0.9999990463256836), ('n01560419', 'bulbul', 4.723466417999589e-07), ('n01806567', 'quail', 2.1718486209465482e-07), ('n01580077', 'jay', 1.342526161351998e-07), ('n01601694', 'water_ouzel', 4.206732739930885e-08)]]
+Time elapsed: 1.8909409046173096
 ```
 
 ## Setup using Bottleneck Features
@@ -227,37 +227,35 @@ Done exporting!
 1. Run ModelServer container using following command:
 ```
 $ docker run -p 8500:8500 \
---name vgg16_tf-serving-model \
---mount type=bind,source=/Users/your_computer_name/vgg16/vgg16_bottleneck_features,target=/models/vgg16_bottleneck_features \
--e MODEL_NAME=vgg16_bottleneck_features \
+--name vgg16_bottleneck-features \
+--mount type=bind,source=/Users/your_computer_name/vgg16/vgg16_bottleneck-features,target=/models/vgg16_bottleneck-features \
+-e MODEL_NAME=vgg16_bottleneck-features \
 -e EXPOSE_PORT_GRPC=8500 \
 -e EXPOSE_PORT_REST=8501 \
 -t tensorflow/serving &
 ```
 2. We should see something like this:
 ```
-2019-01-30 04:35:02.507708: I tensorflow_serving/model_servers/server.cc:82] Building single TensorFlow model file config:  model_name: vgg16_bottleneck_features model_base_path: /models/vgg16_bottleneck_features
-2019-01-30 04:35:02.511478: I tensorflow_serving/model_servers/server_core.cc:461] Adding/updating models.
-2019-01-30 04:35:02.511860: I tensorflow_serving/model_servers/server_core.cc:558]  (Re-)adding model: vgg16_bottleneck_features
-2019-01-30 04:35:02.631587: I tensorflow_serving/core/basic_manager.cc:739] Successfully reserved resources to load servable {name: vgg16_bottleneck_features version: 1}
-2019-01-30 04:35:02.631665: I tensorflow_serving/core/loader_harness.cc:66] Approving load for servable version {name: vgg16_bottleneck_features version: 1}
-2019-01-30 04:35:02.631690: I tensorflow_serving/core/loader_harness.cc:74] Loading servable version {name: vgg16_bottleneck_features version: 1}
-2019-01-30 04:35:02.632159: I external/org_tensorflow/tensorflow/contrib/session_bundle/bundle_shim.cc:363] Attempting to load native SavedModelBundle in bundle-shim from: /models/vgg16_bottleneck_features/1
-2019-01-30 04:35:02.632246: I external/org_tensorflow/tensorflow/cc/saved_model/reader.cc:31] Reading SavedModel from: /models/vgg16_bottleneck_features/1
-2019-01-30 04:35:02.645928: I external/org_tensorflow/tensorflow/cc/saved_model/reader.cc:54] Reading meta graph with tags { serve }
-2019-01-30 04:35:02.655583: I external/org_tensorflow/tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-2019-01-30 04:35:02.704330: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:162] Restoring SavedModel bundle.
-2019-01-30 04:35:03.067297: W external/org_tensorflow/tensorflow/core/framework/allocator.cc:122] Allocation of 67108864 exceeds 10% of system memory.
-2019-01-30 04:35:04.259973: W external/org_tensorflow/tensorflow/core/framework/allocator.cc:122] Allocation of 67108864 exceeds 10% of system memory.
-2019-01-30 04:35:04.552370: W external/org_tensorflow/tensorflow/core/framework/allocator.cc:122] Allocation of 411041792 exceeds 10% of system memory.
-2019-01-30 04:35:08.024038: W external/org_tensorflow/tensorflow/core/framework/allocator.cc:122] Allocation of 411041792 exceeds 10% of system memory.
-2019-01-30 04:35:08.800867: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:138] Running MainOp with key legacy_init_op on SavedModel bundle.
-2019-01-30 04:35:08.800958: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:259] SavedModel load for tags { serve }; Status: success. Took 6168706 microseconds.
-2019-01-30 04:35:08.802236: I tensorflow_serving/servables/tensorflow/saved_model_warmup.cc:83] No warmup data file found at /models/vgg16_bottleneck_features/1/assets.extra/tf_serving_warmup_requests
-2019-01-30 04:35:08.817511: I tensorflow_serving/core/loader_harness.cc:86] Successfully loaded servable version {name: vgg16_bottleneck_features version: 1}
-2019-01-30 04:35:08.828125: I tensorflow_serving/model_servers/server.cc:286] Running gRPC ModelServer at 0.0.0.0:8500 ...
+2019-01-30 04:53:28.148193: I tensorflow_serving/model_servers/server.cc:82] Building single TensorFlow model file config:  model_name: vgg16_bottleneck-features model_base_path: /models/vgg16_bottleneck-features
+2019-01-30 04:53:28.149455: I tensorflow_serving/model_servers/server_core.cc:461] Adding/updating models.
+2019-01-30 04:53:28.149541: I tensorflow_serving/model_servers/server_core.cc:558]  (Re-)adding model: vgg16_bottleneck-features
+2019-01-30 04:53:28.266174: I tensorflow_serving/core/basic_manager.cc:739] Successfully reserved resources to load servable {name: vgg16_bottleneck-features version: 1}
+2019-01-30 04:53:28.266256: I tensorflow_serving/core/loader_harness.cc:66] Approving load for servable version {name: vgg16_bottleneck-features version: 1}
+2019-01-30 04:53:28.266279: I tensorflow_serving/core/loader_harness.cc:74] Loading servable version {name: vgg16_bottleneck-features version: 1}
+2019-01-30 04:53:28.267364: I external/org_tensorflow/tensorflow/contrib/session_bundle/bundle_shim.cc:363] Attempting to load native SavedModelBundle in bundle-shim from: /models/vgg16_bottleneck-features/1
+2019-01-30 04:53:28.267533: I external/org_tensorflow/tensorflow/cc/saved_model/reader.cc:31] Reading SavedModel from: /models/vgg16_bottleneck-features/1
+2019-01-30 04:53:28.278727: I external/org_tensorflow/tensorflow/cc/saved_model/reader.cc:54] Reading meta graph with tags { serve }
+2019-01-30 04:53:28.281717: I external/org_tensorflow/tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-01-30 04:53:28.317521: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:162] Restoring SavedModel bundle.
+2019-01-30 04:53:29.335022: W external/org_tensorflow/tensorflow/core/framework/allocator.cc:122] Allocation of 411041792 exceeds 10% of system memory.
+2019-01-30 04:53:31.494577: W external/org_tensorflow/tensorflow/core/framework/allocator.cc:122] Allocation of 411041792 exceeds 10% of system memory.
+2019-01-30 04:53:32.066024: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:138] Running MainOp with key legacy_init_op on SavedModel bundle.
+2019-01-30 04:53:32.066120: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:259] SavedModel load for tags { serve }; Status: success. Took 3798583 microseconds.
+2019-01-30 04:53:32.067564: I tensorflow_serving/servables/tensorflow/saved_model_warmup.cc:83] No warmup data file found at /models/vgg16_bottleneck-features/1/assets.extra/tf_serving_warmup_requests
+2019-01-30 04:53:32.138090: I tensorflow_serving/core/loader_harness.cc:86] Successfully loaded servable version {name: vgg16_bottleneck-features version: 1}
+2019-01-30 04:53:32.144085: I tensorflow_serving/model_servers/server.cc:286] Running gRPC ModelServer at 0.0.0.0:8500 ...
 [warn] getaddrinfo: address family for nodename not supported
-2019-01-30 04:35:08.841257: I tensorflow_serving/model_servers/server.cc:302] Exporting HTTP/REST API at:localhost:8501 ...
+2019-01-30 04:53:32.145831: I tensorflow_serving/model_servers/server.cc:302] Exporting HTTP/REST API at:localhost:8501 ...
 [evhttp_server.cc : 237] RAW: Entering the event loop ...
 ```
 3. Check the Docker container using following command:
@@ -266,20 +264,20 @@ $ docker ps -a
 ```
 4. We should see something like this:
 ```
-CONTAINER ID        IMAGE                COMMAND                  CREATED             STATUS              PORTS                              NAMES
-0bba70e4a300        tensorflow/serving   "/usr/bin/tf_serving…"   35 seconds ago      Up 33 seconds       0.0.0.0:8500->8500/tcp, 8501/tcp   vgg16_tf-serving-model
+CONTAINER ID        IMAGE                COMMAND                  CREATED              STATUS              PORTS                              NAMES
+29a458e5aa9a        tensorflow/serving   "/usr/bin/tf_serving…"   About a minute ago   Up About a minute   0.0.0.0:8500->8500/tcp, 8501/tcp   vgg16_bottleneck-features
 ```
 
 ### Call Prediction with Bottleneck Features
 1. Now we can call our model that is running in the Docker container using following command:
 ```
-$ python vgg16_predict_bottleneck_features.py --image=./cat.jpg
+$ python vgg16_predict_bottleneck-features.py --image=./bird.jpg
 ```
 2. We should see something like this:
 ```
 Using TensorFlow backend.
 The server hostport is:  localhost:8500
-The image is:  ./cat.jpg
-The result is:  [[('n03207941', 'dishwasher', 0.10127503424882889), ('n02123394', 'Persian_cat', 0.07714854925870895), ('n04553703', 'washbasin', 0.05456560105085373), ('n04554684', 'washer', 0.05264336243271828), ('n02105056', 'groenendael', 0.04825349897146225)]]
-Time elapsed: 2.8194730281829834
+The image is:  ./bird.jpg
+The result is:  [[('n01592084', 'chickadee', 0.9999990463256836), ('n01560419', 'bulbul', 4.723466417999589e-07), ('n01806567', 'quail', 2.1718486209465482e-07), ('n01580077', 'jay', 1.342526161351998e-07), ('n01601694', 'water_ouzel', 4.206732739930885e-08)]]
+Time elapsed: 1.8757410049438477
 ```

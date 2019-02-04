@@ -8,7 +8,6 @@ from keras import backend as K
 from keras.applications.vgg16 import VGG16
 from keras.models import Model
 import numpy as np
-import cv2
 
 from tensorflow.python.saved_model import builder as saved_model_builder
 from tensorflow.python.saved_model import tag_constants
@@ -27,10 +26,10 @@ def main(_):
 	input_layer_in = input_layer.input
 	print("The input layer: ", input_layer_in)
 
-	#get block 5 pool layer for bottleneck features
+	#get block5_pool layer
 	block5_pool = model.get_layer('block5_pool')
 	block5_pool_out = block5_pool.output
-	print("The block 5 pool layer: ", block5_pool_out)
+	print("The block5 pool layer: ", block5_pool_out)
 
 	#get prediction layer
 	predictions_layer = model.get_layer('predictions')
@@ -38,7 +37,7 @@ def main(_):
 	print("The predictions layer: ", predictions_layer_out)
 
 	#create new model using additional output of bottleneck features
-	vgg16_b_f_model = Model(inputs = input_layer_in,
+	vgg16_b_f_model = Model(inputs = input_layer_in, 
 		outputs = [block5_pool_out, predictions_layer_out])
 
 	#view the summary of the new model
@@ -54,10 +53,11 @@ def main(_):
 	print("The block5_pool layer: ", vgg16_b_f_outputs[0])
 	print("The predictions layer: ", vgg16_b_f_outputs[1])
 
-	#convert input layer and predictions layer from tensor to tensor info
-	input_layer_in_info = build_tensor_info(b_f_input_layer_in)
+	#convert input layer, block5 pool layer, and predictions layer from tensor to tensor info
+	input_layer_in_info = build_tensor_info(input_layer_in)
+	block5_pool_out_info = build_tensor_info(block5_pool_out)
 	predictions_layer_out_info = build_tensor_info(vgg16_b_f_outputs[1])
-
+	
 	#export model
 	K.set_learning_phase(0)
 	export_path_base = "./vgg16_bottleneck-features"
@@ -69,7 +69,7 @@ def main(_):
 
 	prediction_signature = build_signature_def(
 		inputs = {'images': input_layer_in_info},
-		outputs = {'scores': predictions_layer_out_info},
+		outputs = {'scores_1': block5_pool_out_info, 'scores_2': predictions_layer_out_info},
 		method_name = signature_constants.PREDICT_METHOD_NAME)
 
 	builder = saved_model_builder.SavedModelBuilder(export_path)

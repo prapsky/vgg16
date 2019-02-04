@@ -58,11 +58,16 @@ def main(_):
 	result = stub.Predict(request, 60.0)
 
 	#get result and postprocess
+	images_predictions_np_b_f = np.zeros((1, 25088), dtype=np.float32)
+	images_predictions_np_b_f[0] = result.outputs['scores_1'].float_val
+	images_predictions_np_b_f = images_predictions_np_b_f.astype(float)
+	print("The result of bottleneck features is: ", images_predictions_np_b_f)
+
 	images_predictions_np = np.zeros((1, 1000), dtype=np.float32)
-	images_predictions_np[0] = result.outputs['scores'].float_val
+	images_predictions_np[0] = result.outputs['scores_2'].float_val
 	images_predictions_np = images_predictions_np.astype(float)
 	images_predictions_list = decode_predictions(images_predictions_np, top=5)
-	print("The result is: ", images_predictions_list)
+	print("The result of predictions is: ", images_predictions_list)
 
 	#end count time
 	end = time.time()

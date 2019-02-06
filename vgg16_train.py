@@ -8,7 +8,6 @@ from keras import backend as K
 from keras.applications.vgg16 import VGG16
 from keras.optimizers import SGD
 import numpy as np
-import cv2
 
 from tensorflow.python.saved_model import builder as saved_model_builder
 from tensorflow.python.saved_model import tag_constants
@@ -26,16 +25,8 @@ def main(_):
 	#compile the model
 	model.compile(optimizer = sgd, loss = 'categorical_crossentropy')
 
-	#test the model
-	im = cv2.resize(cv2.imread('bird.jpg'), (224,224))
-	im = np.expand_dims(im, axis = 0)
-	out = model.predict(im)
-	print("The label is: ", np.argmax(out))
-
 	#view the properties of the model
 	model.summary()
-	print("The input: ", model.inputs)
-	print("The output: ", model.outputs)
 
 	#get input layer
 	input_layer = model.get_layer('input_1')

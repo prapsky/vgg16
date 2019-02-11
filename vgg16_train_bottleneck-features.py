@@ -7,7 +7,6 @@ import tensorflow as tf
 from keras import backend as K
 from keras.applications.vgg16 import VGG16
 from keras.models import Model
-import numpy as np
 
 from tensorflow.python.saved_model import builder as saved_model_builder
 from tensorflow.python.saved_model import tag_constants

@@ -9,7 +9,7 @@ VGG16 Image Classification using TensorFlow Serving and Docker container.
 ### Train and Export
 1. Train and export the model to be served by TensorFlow using following command:
 ```
-$ python vgg16_train.py
+$ python vgg16_export-model.py
 ```
 2. We should see something like this:
 ```
@@ -149,7 +149,7 @@ Time elapsed: 1.8909409046173096
 ### Train and Export with Bottleneck Features
 1. Train and export the model with Bottleneck Features to be served by TensorFlow using following command:
 ```
-$ python vgg16_train_bottleneck_features.py
+$ python vgg16_export-model_bottleneck_features.py
 ```
 2. We should see something like this:
 ```

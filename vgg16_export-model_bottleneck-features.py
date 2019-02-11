@@ -28,7 +28,7 @@ def main(_):
 	#get block5_pool layer
 	block5_pool = model.get_layer('block5_pool')
 	block5_pool_out = block5_pool.output
-	print("The block5 pool layer: ", block5_pool_out)
+	print("The block5 pool layer output: ", block5_pool_out)
 
 	#get prediction layer
 	predictions_layer = model.get_layer('predictions')
@@ -49,13 +49,13 @@ def main(_):
 
 	#get output layer
 	vgg16_b_f_outputs = vgg16_b_f_model.outputs
-	print("The block5_pool layer: ", vgg16_b_f_outputs[0])
-	print("The predictions layer: ", vgg16_b_f_outputs[1])
 
 	#convert input layer, block5 pool layer, and predictions layer from tensor to tensor info
-	input_layer_in_info = build_tensor_info(input_layer_in)
-	block5_pool_out_info = build_tensor_info(block5_pool_out)
+	input_layer_in_info = build_tensor_info(b_f_input_layer_in)
+	block5_pool_out_info = build_tensor_info(vgg16_b_f_outputs[0])
 	predictions_layer_out_info = build_tensor_info(vgg16_b_f_outputs[1])
+	print("The block5_pool layer: ", block5_pool_out_info)
+	print("The predictions layer: ", predictions_layer_out_info)
 	
 	#export model
 	K.set_learning_phase(0)

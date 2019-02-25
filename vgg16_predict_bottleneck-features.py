@@ -38,7 +38,7 @@ def parse_args():
 
 def main(_):
     hostport, image, image_path = parse_args()
-    print("The server hosport is: ", hostport)
+    print("The server hostport is: ", hostport)
     print("The image is: ", image)
 
     #start counting time

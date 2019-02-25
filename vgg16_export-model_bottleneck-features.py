@@ -4,15 +4,15 @@ import os
 import sys
 
 import tensorflow as tf
-from keras import backend as K
 from keras.applications.vgg16 import VGG16
 from keras.models import Model
+from tensorflow.python.saved_model.utils import build_tensor_info
+from keras import backend as K
 
+from tensorflow.python.saved_model.signature_def_utils_impl import build_signature_def
+from tensorflow.python.saved_model import signature_constants
 from tensorflow.python.saved_model import builder as saved_model_builder
 from tensorflow.python.saved_model import tag_constants
-from tensorflow.python.saved_model import signature_constants
-from tensorflow.python.saved_model.utils import build_tensor_info
-from tensorflow.python.saved_model.signature_def_utils_impl import build_signature_def
 
 def main(_):
 	print("Start the training...")
@@ -23,17 +23,14 @@ def main(_):
 	#get input layer
 	input_layer = model.get_layer('input_1')
 	input_layer_in = input_layer.input
-	print("The input layer: ", input_layer_in)
 
 	#get block5_pool layer
 	block5_pool = model.get_layer('block5_pool')
 	block5_pool_out = block5_pool.output
-	print("The block5 pool layer output: ", block5_pool_out)
 
 	#get prediction layer
 	predictions_layer = model.get_layer('predictions')
 	predictions_layer_out = predictions_layer.output
-	print("The predictions layer: ", predictions_layer_out)
 
 	#create new model using additional output of bottleneck features
 	vgg16_b_f_model = Model(inputs = input_layer_in, 

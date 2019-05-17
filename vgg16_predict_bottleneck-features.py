@@ -20,17 +20,17 @@ from keras.applications.vgg16 import decode_predictions
 def parse_args():
     parser = ArgumentParser(description = 'Request a TensorFlow server for a prediction on the image.')
     parser.add_argument('-s', '--server', 
-    	dest = 'server', 
-    	default = 'localhost:8500', 
-    	help = 'prediction service host:port')
+        dest = 'server', 
+        default = 'localhost:8500', 
+        help = 'prediction service host:port')
     parser.add_argument('-i', '--image', 
-    	dest = 'image', 
-    	default = '', 
-    	help = 'path to image in JPEG/JPG/PNG format')
+        dest = 'image', 
+        default = '', 
+        help = 'path to image in JPEG/JPG/PNG format')
     parser.add_argument('-p', '--image_path', 
-    	dest = 'image_path', 
-    	default = '', 
-    	help = 'path to images folder')
+        dest = 'image_path', 
+        default = '', 
+        help = 'path to images folder')
     args = parser.parse_args()
     hostport = args.server
 
@@ -38,7 +38,7 @@ def parse_args():
 
 def main(_):
     hostport, image, image_path = parse_args()
-    print("The server hosport is: ", hostport)
+    print("The server hostport is: ", hostport)
     print("The image is: ", image)
 
     #start counting time
